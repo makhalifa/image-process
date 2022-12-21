@@ -3,6 +3,8 @@ import { existsSync } from 'fs'
 import path from 'path'
 import sharp from 'sharp'
 import getImageDir from '../../utils/getImagesDir'
+import isImageExist from '../../utils/imgExistFunc'
+import sharpIt from '../../utils/sharpFunc'
 
 const router: Router = express.Router()
 
@@ -23,29 +25,27 @@ router.get('/', async (req: Request, res: Response) => {
     const { filename, height, width } = req.query
     console.log(req.query)
     const imgLocation = path.join(imageDir, (filename as string) + '.jpg')
-    const cacheLocation = path.join(cache, `${filename}_${width}x${height}` + '.jpg')
-
-    console.log(imgLocation)
-    console.log(cacheLocation)
+    const cacheLocation = path.join(cache, `${filename}_${width}x${height}` + '.png')
 
     if (existsSync(cacheLocation)) {
         console.log('img exists in cache')
         res.sendFile(cacheLocation)
-
     } else if (existsSync(imgLocation)) {
         console.log('img exists in images')
-
-        sharp(imgLocation)
-            .resize(Number(width), Number(height))
-            .toFile(path.join(cache, `${filename}_${width}x${height}.png`), (err, info) => {
+        sharpIt(
+            filename as string,
+            Number(width),
+            Number(height),
+            (err: Error) => {
                 if (err) {
-                    // throw err
                     res.status(400).send(err.message)
                 }
-                console.log('img created')
-                const resizedImg = path.join(cache, `${filename}_${width}x${height}.png`)
+                res.sendFile
+            },
+            (resizedImg: string) => {
                 res.sendFile(resizedImg)
-            })
+            }
+        )
     } else {
         console.log('img not found')
         res.status(406).json({ msg: 'Image not found' })

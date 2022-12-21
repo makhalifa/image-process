@@ -2,10 +2,12 @@ import express, { Application, Request, Response } from 'express'
 import routes from './routes/index'
 import * as dotenv from 'dotenv'
 import morgan from 'morgan'
+import http, { Server } from 'http'
 
 dotenv.config()
 
 const app: Application = express()
+const server:Server = http.createServer(app)
 const port = process.env.PORT || 3000
 
 /// Third-party middleware ///
@@ -22,8 +24,10 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/api', routes)
 
-app.listen(port, () => {
-    console.log(`Listening on port ${port}`)
+// server start
+server.listen(port, () => {
+    console.log(`Server is running on port ${port}`)
 })
+
 
 export default app
