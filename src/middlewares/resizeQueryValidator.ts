@@ -7,8 +7,20 @@ const router: Router = express.Router()
 router.get(
     '/',
     query('filename').exists().withMessage('filename required').isString().withMessage('filename must be a string'),
-    query('width').exists().withMessage('width required').isNumeric().withMessage('width must be a number'),
-    query('height').exists().withMessage('height required').isNumeric().withMessage('height must be a number'),
+    query('width')
+        .exists()
+        .withMessage('width required')
+        .isNumeric()
+        .withMessage('width must be a number')
+        .isInt({ min: 1 })
+        .withMessage('width must be an integer'),
+    query('height')
+        .exists()
+        .withMessage('height required')
+        .isNumeric()
+        .withMessage('height must be a number')
+        .isInt({ min: 1 })
+        .withMessage('width must be an integer'),
     (req: Request, res: Response, next: NextFunction) => {
         const errors = validationResult(req)
         if (!errors.isEmpty()) {
