@@ -1,9 +1,7 @@
 import express, { Router, Request, Response } from 'express'
 import { existsSync } from 'fs'
 import path from 'path'
-import sharp from 'sharp'
 import getImageDir from '../../utils/getImagesDir'
-import isImageExist from '../../utils/imgExistFunc'
 import sharpIt from '../../utils/sharpFunc'
 
 const router: Router = express.Router()
@@ -37,10 +35,7 @@ router.get('/', async (req: Request, res: Response) => {
             Number(width),
             Number(height),
             (err: Error) => {
-                if (err) {
-                    res.status(400).send(err.message)
-                }
-                res.sendFile
+                res.status(400).send(err.message)
             },
             (resizedImg: string) => {
                 res.sendFile(resizedImg)

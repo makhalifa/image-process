@@ -7,7 +7,7 @@ import http, { Server } from 'http'
 dotenv.config()
 
 const app: Application = express()
-const server:Server = http.createServer(app)
+const server: Server = http.createServer(app)
 const port = process.env.PORT || 3000
 
 /// Third-party middleware ///
@@ -28,6 +28,5 @@ app.use('/api', routes)
 server.listen(port, () => {
     console.log(`Server is running on port ${port}`)
 })
-
 
 export default app

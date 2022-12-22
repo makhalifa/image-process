@@ -12,7 +12,6 @@ const sharpIt = (filename: string, width: number, height: number, errfunc: Funct
         .resize(Number(width), Number(height))
         .toFile(path.join(cache, `${filename}_${width}x${height}.png`), (err, info) => {
             if (err) {
-                // throw err
                 errfunc(err)
             }
             console.log('img created')
@@ -20,5 +19,6 @@ const sharpIt = (filename: string, width: number, height: number, errfunc: Funct
             passFunc(resizedImg)
         })
 }
+
 
 export default sharpIt
